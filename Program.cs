@@ -1,40 +1,49 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="Program.cs" company="">
-//     Author:  
-//     Copyright (c) . All rights reserved.
-// </copyright>
-//-----------------------------------------------------------------------
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 
 namespace MrRainbow
 {
-
-    public class Program
+    class Program
     {
 
-        private static readonly List<ConsoleColor> _colors = new()
-        {
-            ConsoleColor.Red,
-            ConsoleColor.DarkYellow,
-            ConsoleColor.Yellow,
-            ConsoleColor.Green,
-            ConsoleColor.Blue,
-            ConsoleColor.DarkMagenta,
-            ConsoleColor.Magenta
-        };
+        private static List<ConsoleColor> _colors = new List<ConsoleColor>()
+                {
+                    ConsoleColor.Red ,
+                    ConsoleColor.DarkYellow,
+                    ConsoleColor.Yellow,
+                    ConsoleColor.Green,
+                    ConsoleColor.Blue,
+                    ConsoleColor.DarkMagenta,
+                    ConsoleColor.Magenta
+                };
 
-        private static void MakeLine(int x, int y, ConsoleColor lineColor)
+        static void Main(string[] args)
         {
-            Console.CursorLeft = x;
-            Console.CursorTop = y;
+            Console.Clear();
+            Console.CursorVisible = false;
 
-            string oneLine = new('█', Console.BufferWidth - (x * 2));
-            ConsoleColor col = Console.ForegroundColor;
-            Console.ForegroundColor = lineColor;
-            Console.WriteLine(oneLine);
-            Console.ForegroundColor = col;
+            var colorCount = _colors.Count;
+            var colorOffset = 0;
+
+            for (int loop = 0; loop < 5000000; loop++)
+            {
+                var y = 5;
+
+                y = MakeRainbow(colorCount, colorOffset, 10, y);
+                y = MakeRainbow(colorCount, colorOffset, 10, y);
+                //y = MakeRainbow(colorCount, colorOffset, 10, y);
+                //y = MakeRainbow(colorCount, colorOffset, 10, y);
+
+                colorOffset++;
+                if (colorOffset > 6)
+                    colorOffset = 0;
+
+                Thread.Sleep(100);
+            }
+
+            Console.CursorVisible = true;
+            Console.ReadKey();
         }
 
         private static int MakeRainbow(int colorCount, int colorOffset, int x, int y)
@@ -53,37 +62,16 @@ namespace MrRainbow
             return y;
         }
 
-        public static void Main(string[] args)
+        private static void MakeLine(int x, int y, ConsoleColor lineColor)
         {
-            Console.Clear();
-            Console.CursorVisible = false;
+            Console.CursorLeft = x;
+            Console.CursorTop = y;
 
-            int colorCount = _colors.Count;
-            int colorOffset = 0;
-
-            for(int loop = 0; loop < 5000000; loop++)
-            {
-                int y = 5;
-
-                y = MakeRainbow(colorCount, colorOffset, 10, y);
-                int unused1 = MakeRainbow(colorCount, colorOffset, 10, y);
-
-                //y = MakeRainbow(colorCount, colorOffset, 10, y);
-                //y = MakeRainbow(colorCount, colorOffset, 10, y);
-
-                colorOffset++;
-                if(colorOffset > 6)
-                {
-                    colorOffset = 0;
-                }
-
-                Thread.Sleep(100);
-            }
-
-            Console.CursorVisible = true;
-            ConsoleKeyInfo unused = Console.ReadKey();
+            string oneLine = new('█', Console.BufferWidth - (x * 2));
+            var col = Console.ForegroundColor;
+            Console.ForegroundColor = lineColor;
+            Console.WriteLine(oneLine);
+            Console.ForegroundColor = col;
         }
-
     }
-
 }
